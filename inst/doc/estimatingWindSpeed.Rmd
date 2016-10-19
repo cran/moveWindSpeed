@@ -1,0 +1,205 @@
+---
+title: "Estimating wind speed"
+author: "Bart Kranstauber"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimating wind speed}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=5, fig.height = 4)
+```
+
+In this vignette we will analyse the example data from the `moveWindSpeed` package. In order to do so we will first load the data and explore it before diving in to the analysis.
+
+```{r load}
+require(moveWindSpeed)
+data("storks")
+plot(
+  storks,
+  xlab = "Longitude",
+  ylab = "Latitude",
+  main = "Stork data" ,
+  pch = 19,
+  cex = .3
+)
+```
+
+## Investigate one individual
+
+We focus on 2 minutes where we know that high resolution trajectories were recorded while the bird was in a thermal and select the first individual. We transform the trajectory to a local projection for better plotting.
+
+```{r subset}
+storksSub <-
+  storks[strftime(timestamps(storks), format = "%H%M", tz="UTC") %in% c("1303", "1304"), ]
+storksWind <- getWindEstimates(storksSub)
+storksWind <- spTransform(storksWind, center = T)
+indiv1 <- storksWind[[1]]
+indiv1
+```
+
+Lets first assure that the individual is sampled with one hertz. This is crucial because some of the calculations we do below for plotting assume this.
+
+```{r freq}
+unique(as.numeric(diff(timestamps(indiv1)), units='secs'))
+```
+
+Now lets have a look at the track in one individual within the thermal. We add an arrow to each 10th location to indicate the estimated wind speed.
+
+```{r plotExample}
+plot(
+  indiv1,
+  type = 'l',
+  xlim = c(-150, 150),
+  main = row.names(idData(indiv1))
+)
+s <- as.numeric(timestamps(indiv1)) %% 10 == 0
+expansion <- 3
+arrows(
+  coordinates(indiv1)[s, 1],
+  coordinates(indiv1)[s, 2],
+  coordinates(indiv1)[s, 1] + indiv1$windX[s] * expansion,
+  coordinates(indiv1)[s, 2] + indiv1$windY[s] * expansion,
+  col = 'red',
+  length = .1
+)
+```
+
+We can also select one rotation and plot how head wind speed vector combined with the airspeed vector results in the ground speed.
+
+```{r arrows}
+indivSub <- indiv1[45:72,]
+plot(indivSub, pch = 19)
+arrows(
+  coordinates(indivSub)[-n.locs(indivSub), 1],
+  coordinates(indivSub)[-n.locs(indivSub), 2],
+  coordinates(indivSub)[-1, 1],
+  coordinates(indivSub)[-1, 2],
+  length = .1
+)
+arrows(
+  coordinates(indivSub)[-n.locs(indivSub), 1],
+  coordinates(indivSub)[-n.locs(indivSub), 2],
+  coordinates(indivSub)[-n.locs(indivSub), 1] + head(indivSub$windX,-1),
+  coordinates(indivSub)[-n.locs(indivSub), 2] + head(indivSub$windY,-1),
+  col = "red",
+  length = .1
+)
+arrows(
+  coordinates(indivSub)[-n.locs(indivSub), 1] + head(indivSub$windX,-1),
+  coordinates(indivSub)[-n.locs(indivSub), 2] + head(indivSub$windY,-1),
+  coordinates(indivSub)[-1, 1],
+  coordinates(indivSub)[-1, 2],
+  col = "green",
+  length = .1
+)
+legend(
+  "topright",
+  legend = c("Ground speed", "Wind Speed", "Air Speed"),
+  bty = "n",
+  col = c("black", "red", "green"),
+  lty = 1
+)
+```
+
+Now lets see how the track looks once we subtract the wind speed, so that we only look at the rotations relative to the air. We see that the bird half way the thermal changes its relative position in the air column.
+
+```{r airVector}
+s <- !is.na(indiv1$windX)
+x <- cumsum(diff(coordinates(indiv1)[, 1])[s] - indiv1$windX[s])
+y <- cumsum(diff(coordinates(indiv1)[, 2])[s] - indiv1$windY[s])
+plot(x, y, type = 'l', main = "Wind corrected trajectory")
+```
+
+## Multiple storks in a thermal
+
+Lets take the same two minute section and compare all wind speed estimates. We see that there all estimates fall in a pretty narrow range. 
+
+```{r group}
+storksSub <- getWindEstimates(storksSub, windowSize = 31)
+plot(
+  storksSub$windX,
+  storksSub$windY,
+  col = trackId(storksSub),
+  pch = 19,
+  xlim = range(na.omit(c(0, storksSub$windX))),
+  ylim = range(na.omit(c(0, storksSub$windY))),
+  asp = 1,
+  main = "Distribution of wind speed estimates"
+)
+```
+
+We can also create a vertical wind speed profile through a thermal. To do so we select a thermal where most birds are present. We see that there seems to be quite a consistent pattern.
+
+```{r verticalProfile}
+windData <- getWindEstimates(storks)
+windData <- windData[strftime(timestamps(windData), format = "%H", tz="UTC") == "12" &
+                       !is.na(windData$windX), ]
+plot(
+  sqrt(windData$windX ^ 2 + windData$windY ^ 2),
+  windData$height_above_ellipsoid,
+  main = "Vertical wind profile",
+  xlab = "Wind speed",
+  ylab = "Altitude",
+  col = trackId(windData),
+  pch = 19
+)
+```
+
+## Varying the settings
+
+We see that if we raise our criteria for thermal soaring the conditions are more rarely occurring. 
+```{r rotations}
+indivSub <- storks[[1]]
+quater <-
+  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(90))
+half <-
+  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(180))
+full <-
+  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(360))
+two <-
+  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(720))
+
+sum(!is.na(quater$windX))
+sum(!is.na(half$windX))
+sum(!is.na(full$windX))
+sum(!is.na(two$windX))
+```
+
+We can for example also focus on a longer window, meaning we find are more likely to find hits for our rotation criteria. 
+
+```{r wl}
+short <-
+  getWindEstimates(indivSub,
+                   hasVariationInHeadingFunction = getDefaultIsThermallingFunction(720),
+                   windowSize = 29)
+long <-
+  getWindEstimates(indivSub,
+                   hasVariationInHeadingFunction = getDefaultIsThermallingFunction(720),
+                   windowSize = 41)
+sum(!is.na(short$windX))
+sum(!is.na(long$windX))
+```
+We can also speed up calculations by only looking at each 5th location. This will also reduce the overlap between windows.
+```{r speedup}
+system.time(getWindEstimates(
+  indivSub,
+  isFocalPoint = function(i, ts) {
+    T
+  }
+))
+system.time(getWindEstimates(
+  indivSub,
+  isFocalPoint = function(i, ts) {
+    (i %% 5) == 0
+  }
+))
+```
+
+
+
+
