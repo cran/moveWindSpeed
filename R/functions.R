@@ -1,44 +1,50 @@
-
-#' getDefaultIsThermallingFunction
+#' A function to generate an isThermallingFunction
 #'
-#' @param totalAngle the cumilative angle that is required to consider an trajectory thermaling
+#' @param totalAngle the cumulative angle that is required to consider an trajectory thermalling
+#' @param minMeanSpeed the minimal air speed that is required to decide of a track is thermalling
 #'
-#' @return a function is returned that based on a series of headings returns a logical value to indicate is a track is thermaling or not
+#' @return a function is returned that based on a series of headings returns a logical value to indicate is a track is thermalling or not
 #' @export
 #'
 #' @examples
 #' fun<-getDefaultIsThermallingFunction(170)
 #' fun(1:160)
-#' fun(1:190)
-getDefaultIsThermallingFunction <- function(totalAngle = 360) {
+#' fun(1:190, rep(2,190))
+#' fun<-getDefaultIsThermallingFunction(170, 3)
+#' fun(1:190, rep(2,190))
+#' fun(1:190, rep(3.4,190))
+
+getDefaultIsThermallingFunction <- function(totalAngle = 360, minMeanSpeed=NULL) {
   stopifnot(is.numeric(totalAngle))
   stopifnot(length(totalAngle)==1)
-  function(headings) {
+if(is.null(minMeanSpeed)){
+  return(  function(headings, speeds) {
     diffHeading = diff(headings)
     diffHeading <- ((diffHeading + 180) %% 360) - 180
     max(abs(cumsum(diffHeading))) >= totalAngle
-  }
+  })}else{
+    stopifnot(is.numeric(minMeanSpeed))
+    stopifnot(length(minMeanSpeed)==1)
+    
+    return(  function(headings, speeds) {
+      diffHeading = diff(headings)
+      diffHeading <- ((diffHeading + 180) %% 360) - 180
+      max(abs(cumsum(diffHeading))) >= totalAngle & mean(speeds)>minMeanSpeed
+    })
+    }
 }
-
-#' getSamplingIsRegularFunction
+#' Estimate the log likelihood 
 #'
-#' @param samplingIntervalSeconds the interval that is considered regular
+#' @param sigma the residual variance in airspeed
+#' @param phi the autocorrelation used in the calculations
 #'
-#' @return a function is returned that based on a series of timestamps decides if the segment is regular
+#' @return the log likelihood
 #' @export
 #'
 #' @examples
-#' fun<-getSamplingIsRegularFunction(10)
-#' fun(Sys.time()+1:5)
-#' fun(Sys.time()+c(0,10,20,30))
-#' fun(Sys.time()+c(0,10,20,31))
-getSamplingIsRegularFunction <- function(samplingIntervalSeconds) {
-  stopifnot(is.numeric(samplingIntervalSeconds))
-  stopifnot(length(samplingIntervalSeconds)==1)
-  function(timestamps) {
-    retval = all(diff(as.numeric(timestamps)) == samplingIntervalSeconds)
-    if (is.na(retval))
-      retval = F
-    retval
+#' windEstimLogLik(c(1.3,.6,1.5,1.8),.3)
+#' windEstimLogLik(c(1.3,.6,1.5,1.8),.5)
+
+windEstimLogLik<-function(sigma, phi){
+  sum(length(sigma) * log(sigma ^ 2) - log(1 - phi ^ 2))
   }
-}

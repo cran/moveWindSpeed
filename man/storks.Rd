@@ -4,7 +4,7 @@
 \name{storks}
 \alias{storks}
 \title{Example stork data.}
-\format{A MoveStack consiting of 22333 locations}
+\format{A MoveStack consisting of 22333 locations}
 \source{
 \url{http://www.movebank.org/}
 }
@@ -12,7 +12,7 @@
 storks
 }
 \description{
-A dataset containing location data of 6 juvinile storks on the 18th of august when migration just started
+A dataset containing location data of 6 juvenile storks (Ciconia ciconia) on the 18th of august when migration just started. On several occasion the birds use thermals.
 }
 \examples{
 data("storks")

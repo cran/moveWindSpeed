@@ -2,22 +2,27 @@
 % Please edit documentation in R/functions.R
 \name{getDefaultIsThermallingFunction}
 \alias{getDefaultIsThermallingFunction}
-\title{getDefaultIsThermallingFunction}
+\title{A function to generate an isThermallingFunction}
 \usage{
-getDefaultIsThermallingFunction(totalAngle = 360)
+getDefaultIsThermallingFunction(totalAngle = 360, minMeanSpeed = NULL)
 }
 \arguments{
-\item{totalAngle}{the cumilative angle that is required to consider an trajectory thermaling}
+\item{totalAngle}{the cumulative angle that is required to consider an trajectory thermalling}
+
+\item{minMeanSpeed}{the minimal air speed that is required to decide of a track is thermalling}
 }
 \value{
-a function is returned that based on a series of headings returns a logical value to indicate is a track is thermaling or not
+a function is returned that based on a series of headings returns a logical value to indicate is a track is thermalling or not
 }
 \description{
-getDefaultIsThermallingFunction
+A function to generate an isThermallingFunction
 }
 \examples{
 fun<-getDefaultIsThermallingFunction(170)
 fun(1:160)
-fun(1:190)
+fun(1:190, rep(2,190))
+fun<-getDefaultIsThermallingFunction(170, 3)
+fun(1:190, rep(2,190))
+fun(1:190, rep(3.4,190))
 }
 

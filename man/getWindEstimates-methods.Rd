@@ -6,46 +6,59 @@
 \alias{getWindEstimates,Move,missing-method}
 \alias{getWindEstimates,MoveStack,missing-method}
 \alias{getWindEstimates,data.frame,POSIXct-method}
-\title{Title}
+\alias{getWindEstimates,list,ANY-method}
+\title{Generate wind estimates for a trajectories or data frame with wind speeds}
 \usage{
 getWindEstimates(data, timestamps, ...)
 
 \S4method{getWindEstimates}{MoveStack,missing}(data, timestamps, ...)
 
-\S4method{getWindEstimates}{Move,missing}(data, timestamps, ...)
+\S4method{getWindEstimates}{Move,missing}(data, timestamps,
+  groundSpeedXY = NULL, ...)
 
 \S4method{getWindEstimates}{data.frame,POSIXct}(data, timestamps,
-  windowSize = 29, phi = 0.5, isFocalPoint = function(i, ts) {     TRUE },
-  isSamplingRegular = 1,
-  hasVariationInHeadingFunction = getDefaultIsThermallingFunction(360),
+  windowSize = 29, isFocalPoint = function(i, ts) {     TRUE },
+  isSamplingRegular = 1, focalSampleBefore = 0, returnSegmentList = F,
+  referenceGroundSpeed = NULL, ...)
+
+\S4method{getWindEstimates}{list,ANY}(data, timestamps, phi = 0,
+  isThermallingFunction = getDefaultIsThermallingFunction(360, 4),
   columnNamesWind = c("estimationSuccessful", "residualVarAirspeed", "windX",
-  "windY", "windVarX", "windVarY", "windCovarXY", "windVarMax",
-  "isThermalling"), ...)
+  "windY", "windVarX", "windVarY", "windCovarXY", "windVarMax", "airX", "airY"),
+  referenceGroundSpeed = NULL, ...)
 }
 \arguments{
 \item{data}{Move object, MoveStack or data.frame containing wind speeds}
 
 \item{timestamps}{timestamps of the speed observations}
 
-\item{...}{other possible arguments currently nothing else is implented}
+\item{...}{other possible arguments currently nothing else is implemented}
+
+\item{groundSpeedXY}{an character of length 2 containing column names from the move object that need to be used as the x and y component of the ground speed vector}
 
 \item{windowSize}{a numeric vector of length 1 or 2, if length 1 it is the size of the focal window data will be assigned to the central location. If length 2 the window size is \code{sum(windowSize)+1)} and the first element is the number of location before the focal locations, the second is the number of locations after the focal location.}
 
-\item{phi}{todo}
-
-\item{isFocalPoint}{todo}
+\item{isFocalPoint}{an function that based on location number and timestamps returns a logical vector if location should be included. Or a numeric/logical vector indicating the location numbers.}
 
 \item{isSamplingRegular}{either a function that determines based on a vector of timestamps if the sampling interval is regular or a numeric value that corresponds to the time interval between observations in the dataset that is regular}
 
-\item{hasVariationInHeadingFunction}{todo}
+\item{focalSampleBefore}{The number of locations that occurred before the move object fed in the getWindEstimates function, used in case stacks are provided for example. This is most cases not useful for users.}
 
-\item{columnNamesWind}{todo}
+\item{returnSegmentList}{a logical value indicating if the list of segments to estimate wind over should be returned instead of the estimates}
+
+\item{referenceGroundSpeed}{a number indicating which of the grounds speed vectors to take as a reference for air speed, by default the 0th location of the window}
+
+\item{phi}{the auto correlation of air speed.}
+
+\item{isThermallingFunction}{An function that based on a series of headings and speeds (wind corrected) decides if an segment should be considered thermalling.}
+
+\item{columnNamesWind}{The column names used for storing the data in the returned objected after it has been calculated.}
 }
 \value{
 a Move object, dataframe or a MoveStack depending on input
 }
 \description{
-Title
+Generate wind estimates for a trajectories or data frame with wind speeds
 }
 \examples{
 data("storks")
@@ -56,8 +69,8 @@ plot(windEst)
 # only plot few arrows of estimates
 s<-windEst$estimationSuccessful & format(timestamps(windEst), "\%S")=='00'
 # enlarge arrows 30 times
-arrows(coordinates(windEst)[s,1],coordinates(windEst)[s,2], 
-   coordinates(windEst)[s,1]+ windEst$windX[s]*30, 
+arrows(coordinates(windEst)[s,1],coordinates(windEst)[s,2],
+   coordinates(windEst)[s,1]+ windEst$windX[s]*30,
    coordinates(windEst)[s,2]+windEst$windY[s]*30)
 }
 

@@ -113,13 +113,13 @@ plot(
 ## ----rotations-----------------------------------------------------------
 indivSub <- storks[[1]]
 quater <-
-  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(90))
+  getWindEstimates(indivSub, isThermallingFunction = getDefaultIsThermallingFunction(90))
 half <-
-  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(180))
+  getWindEstimates(indivSub, isThermallingFunction = getDefaultIsThermallingFunction(180))
 full <-
-  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(360))
+  getWindEstimates(indivSub, isThermallingFunction = getDefaultIsThermallingFunction(360))
 two <-
-  getWindEstimates(indivSub, hasVariationInHeadingFunction = getDefaultIsThermallingFunction(720))
+  getWindEstimates(indivSub, isThermallingFunction = getDefaultIsThermallingFunction(720))
 
 sum(!is.na(quater$windX))
 sum(!is.na(half$windX))
@@ -129,11 +129,11 @@ sum(!is.na(two$windX))
 ## ----wl------------------------------------------------------------------
 short <-
   getWindEstimates(indivSub,
-                   hasVariationInHeadingFunction = getDefaultIsThermallingFunction(720),
+                   isThermallingFunction = getDefaultIsThermallingFunction(720),
                    windowSize = 29)
 long <-
   getWindEstimates(indivSub,
-                   hasVariationInHeadingFunction = getDefaultIsThermallingFunction(720),
+                   isThermallingFunction = getDefaultIsThermallingFunction(720),
                    windowSize = 41)
 sum(!is.na(short$windX))
 sum(!is.na(long$windX))
