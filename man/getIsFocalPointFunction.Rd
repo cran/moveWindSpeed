@@ -15,4 +15,3 @@ a function which decides if wind estimation is performed for a point in the inpu
 \description{
 A function to generate isFocalPoint functions
 }
-

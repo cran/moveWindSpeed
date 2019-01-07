@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 calcVar <- function(groundSpeeds, windSpeed, phi) {
-    .Call('moveWindSpeed_calcVar', PACKAGE = 'moveWindSpeed', groundSpeeds, windSpeed, phi)
+    .Call('_moveWindSpeed_calcVar', PACKAGE = 'moveWindSpeed', groundSpeeds, windSpeed, phi)
 }
 

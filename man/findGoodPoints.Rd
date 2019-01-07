@@ -4,8 +4,8 @@
 \alias{findGoodPoints}
 \title{Function to find good points for estimation of phi}
 \usage{
-findGoodPoints(data, maxPointsToUseInEstimate, phiInitialEstimate, windowSize,
-  ...)
+findGoodPoints(data, maxPointsToUseInEstimate, phiInitialEstimate,
+  windowSize, ...)
 }
 \arguments{
 \item{data}{An move object.}
@@ -31,4 +31,3 @@ windowSize = 29,  isSamplingRegular = 1,
 isThermallingFunction = getDefaultIsThermallingFunction(360, 4),  maxPointsToUseInEstimate = 10,
 phiInitialEstimate = 0  ))
 }
-

@@ -4,7 +4,7 @@ author: "Rolf Weinzierl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Estimating wind speed}
+  %\VignetteIndexEntry{Determining parameters for wind estimation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,36 +19,36 @@ require("moveWindSpeed")
 
 We first load an example stork track which is shipped with the moveWindSpeed package.
 ```{r}
-data = storks[[1]]
+data <- storks[[1]]
 ```
 
 Wind estimates are based on track segments of fixed length and fixed sampling rate. For the length of the segment we use the default value of 29:
 ```{r}
-windowSize = 29
+windowSize <- 29
 ```
 
 In order to determine an appropriate sampling rate we check the sampling rate in the stork track:
 ```{r}
-tdiffs = diff(as.numeric(timestamps(data)))
+tdiffs <- diff(as.numeric(timestamps(data)))
 quantile(tdiffs, c(0.01, 0.1, 0.5, 0.9, 0.99))
 ```
 The mayority of data points were sampled in 1 second intervals, so we choose 1 second as our sampling interval:
 ```{r}
-isSamplingRegular = 1
+isSamplingRegular <- 1
 ```
 
 Wind estimation results can only be trusted if the bird is actually flying and if it is making turns, usually while circling in a thermal. We will only consider track segments in which the bird turns at least 360 degrees and has an average speed of at least 4 m/s:
 ```{r}
-isThermallingFunction = getDefaultIsThermallingFunction(360, 4)
+isThermallingFunction <- getDefaultIsThermallingFunction(360, 4)
 ```
 
 The wind estimation is based on the assumption that, within a given track segment, the air speed of the bird fluctuates randomly around a fixed mean. For high sampling rates, however, the deviations from the mean are not statistically independent, but tend to be correlated between subsequent points. We therefore need to estimate the temporal autocorrelation paramater phi (see [AR(1) processes](https://en.wikipedia.org/wiki/Autoregressive_model#Example:_An_AR.281.29_process)). Phi is not estimated for each track segment separately, but across all segments of a track. For performance reasons the number of segments used in the estimation of phi can be restricted:
 ```{r}
-maxPointsToUseInEstimate = 25
+maxPointsToUseInEstimate <- 25
 ```
 With the parameters defined so far we can run the function for estimating temporal autocorrelation paramater phi:
 ```{r}
-estimationResult = estimatePhi(data, isSamplingRegular=isSamplingRegular, windowSize=windowSize, isThermallingFunction=isThermallingFunction, maxPointsToUseInEstimate=maxPointsToUseInEstimate, phiInitialEstimate=0, returnPointsUsedInEstimate=T)
+estimationResult <- estimatePhi(data, isSamplingRegular=isSamplingRegular, windowSize=windowSize, isThermallingFunction=isThermallingFunction, maxPointsToUseInEstimate=maxPointsToUseInEstimate, phiInitialEstimate=0, returnPointsUsedInEstimate=T)
 ```
 The estimation function returns the estimated value of phi and the number of points used in the estimate.
 ```{r}
@@ -60,30 +60,30 @@ In this example only `r estimationResult$n` suitable track segments were found w
 The following chart shows those `r estimationResult$n` track segments:
 ```{r}
 oo <- lapply(1:nrow(data), '+', (-(windowSize-1)/2):((windowSize-1)/2))[estimationResult$isPointUsedInEstimate]
-oo = oo[1:min(length(oo), maxPointsToUseInEstimate)]
-op = par(mfrow=c(4,6), mar=rep(0.5, 4))
+oo <- oo[1:min(length(oo), maxPointsToUseInEstimate)]
+op <- par(mfrow=c(4,6), mar=rep(0.5, 4))
 # Plot track segments
-tmp = lapply(oo, function(ooo) plot(data[(ooo)], typ='b', xlab=NA, ylab=NA, axes=F))
+tmp <- lapply(oo, function(ooo) plot(data[(ooo)], typ='b', xlab=NA, ylab=NA, axes=F))
 par(op)
 ```
 
 We are now equipped to run the actual wind estimation along the original track. Technically wind can be estimated for every point in the track, but then the track segments used in the estimation will overlap for adjacent points. In order to avoid that we restrict the estimation to every `r windowSize`th point:
 ```{r}
-isFocalPoint=function(i, ts) i%%windowSize==0
+isFocalPoint<-function(i, ts) i%%windowSize==0
 ```
 Now we run the estimation function:
 ```{r}
-phi = estimationResult$phi
-windEst = getWindEstimates(data, isSamplingRegular=isSamplingRegular, windowSize=windowSize, isThermallingFunction=isThermallingFunction, phi=phi, isFocalPoint=isFocalPoint)
+phi <- estimationResult$phi
+windEst <- getWindEstimates(data, isSamplingRegular=isSamplingRegular, windowSize=windowSize, isThermallingFunction=isThermallingFunction, phi=phi, isFocalPoint=isFocalPoint)
 names(windEst)
 ```
 We only want to retain points for which the estimation was successful and where the bird was thermalling:
 ```{r}
-windEst2 = windEst[!is.na(windEst$estimationSuccessful),]
+windEst2 <- windEst[!is.na(windEst$estimationSuccessful),]
 ```
 Here is a simple plot of the wind speeds obtained:
 ```{r}
-windSpeed = sqrt(windEst2$windX^2+windEst2$windY^2)
+windSpeed <-sqrt(windEst2$windX^2+windEst2$windY^2)
 plot(timestamps(windEst2), windSpeed)
 ```
 

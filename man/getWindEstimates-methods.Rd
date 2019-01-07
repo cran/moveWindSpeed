@@ -3,8 +3,8 @@
 \docType{methods}
 \name{getWindEstimates}
 \alias{getWindEstimates}
-\alias{getWindEstimates,Move,missing-method}
 \alias{getWindEstimates,MoveStack,missing-method}
+\alias{getWindEstimates,Move,missing-method}
 \alias{getWindEstimates,data.frame,POSIXct-method}
 \alias{getWindEstimates,list,ANY-method}
 \title{Generate wind estimates for a trajectories or data frame with wind speeds}
@@ -18,14 +18,14 @@ getWindEstimates(data, timestamps, ...)
 
 \S4method{getWindEstimates}{data.frame,POSIXct}(data, timestamps,
   windowSize = 29, isFocalPoint = function(i, ts) {     TRUE },
-  isSamplingRegular = 1, focalSampleBefore = 0, returnSegmentList = F,
-  referenceGroundSpeed = NULL, ...)
+  isSamplingRegular = 1, focalSampleBefore = 0,
+  returnSegmentList = F, referenceGroundSpeed = NULL, ...)
 
 \S4method{getWindEstimates}{list,ANY}(data, timestamps, phi = 0,
   isThermallingFunction = getDefaultIsThermallingFunction(360, 4),
-  columnNamesWind = c("estimationSuccessful", "residualVarAirspeed", "windX",
-  "windY", "windVarX", "windVarY", "windCovarXY", "windVarMax", "airX", "airY"),
-  referenceGroundSpeed = NULL, ...)
+  columnNamesWind = c("estimationSuccessful", "residualVarAirspeed",
+  "windX", "windY", "windVarX", "windVarY", "windCovarXY", "windVarMax",
+  "airX", "airY"), referenceGroundSpeed = NULL, ...)
 }
 \arguments{
 \item{data}{Move object, MoveStack or data.frame containing wind speeds}
@@ -46,7 +46,7 @@ getWindEstimates(data, timestamps, ...)
 
 \item{returnSegmentList}{a logical value indicating if the list of segments to estimate wind over should be returned instead of the estimates}
 
-\item{referenceGroundSpeed}{a number indicating which of the grounds speed vectors to take as a reference for air speed, by default the 0th location of the window}
+\item{referenceGroundSpeed}{a number indicating which of the grounds speed vectors to take as a reference for air speed, by default the 0th/middle location of the window if that is specified by one number.}
 
 \item{phi}{the auto correlation of air speed.}
 
@@ -73,4 +73,3 @@ arrows(coordinates(windEst)[s,1],coordinates(windEst)[s,2],
    coordinates(windEst)[s,1]+ windEst$windX[s]*30,
    coordinates(windEst)[s,2]+windEst$windY[s]*30)
 }
-

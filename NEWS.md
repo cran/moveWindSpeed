@@ -1,3 +1,7 @@
+# moveWindSpeed 0.2.2
+
+* Update vignette title
+
 # moveWindSpeed 0.2.1
 
 * Fix typo in description

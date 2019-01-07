@@ -18,4 +18,3 @@ A dataset containing location data of 6 juvenile storks (Ciconia ciconia) on the
 data("storks")
 }
 \keyword{datasets}
-

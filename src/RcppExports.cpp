@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // calcVar
 NumericVector calcVar(NumericMatrix groundSpeeds, NumericVector windSpeed, NumericVector phi);
-RcppExport SEXP moveWindSpeed_calcVar(SEXP groundSpeedsSEXP, SEXP windSpeedSEXP, SEXP phiSEXP) {
+RcppExport SEXP _moveWindSpeed_calcVar(SEXP groundSpeedsSEXP, SEXP windSpeedSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;

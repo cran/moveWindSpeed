@@ -25,4 +25,3 @@ fun<-getDefaultIsThermallingFunction(170, 3)
 fun(1:190, rep(2,190))
 fun(1:190, rep(3.4,190))
 }
-

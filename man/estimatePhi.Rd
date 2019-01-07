@@ -4,10 +4,11 @@
 \alias{estimatePhi}
 \title{estimatePhi}
 \usage{
-estimatePhi(data, isThermallingFunction = getDefaultIsThermallingFunction(360,
-  4), maxPointsToUseInEstimate = 20, phiInitialEstimate = 0,
-  isGoodPoint = NULL, returnPointsUsedInEstimate = F, windowSize = 29,
-  ...)
+estimatePhi(data,
+  isThermallingFunction = getDefaultIsThermallingFunction(360, 4),
+  maxPointsToUseInEstimate = 20, phiInitialEstimate = 0,
+  isGoodPoint = NULL, returnPointsUsedInEstimate = F,
+  windowSize = 29, ...)
 }
 \arguments{
 \item{data}{An move object or stack.}
@@ -42,4 +43,3 @@ estimatePhi(
   maxPointsToUseInEstimate = 10
 )
 }
-

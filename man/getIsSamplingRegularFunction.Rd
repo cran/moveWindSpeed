@@ -21,4 +21,3 @@ fun(Sys.time()+1:5)
 fun(Sys.time()+c(0,10,20,30))
 fun(Sys.time()+c(0,10,20,31))
 }
-

@@ -15,4 +15,3 @@ windowSize a pair of positive integers determining the window size left and righ
 \description{
 A function to translate an window size argument to a standardized argument.
 }
-

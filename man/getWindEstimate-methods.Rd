@@ -3,14 +3,14 @@
 \docType{methods}
 \name{getWindEstimate}
 \alias{getWindEstimate}
-\alias{getWindEstimate,matrix,numeric,ANY-method}
 \alias{getWindEstimate,matrix,numeric-method}
+\alias{getWindEstimate,matrix,numeric,ANY-method}
 \title{Estimate wind speed from a sample of ground speeds}
 \usage{
 getWindEstimate(groundSpeeds, phi, windStart = c(0, 0))
 
-\S4method{getWindEstimate}{matrix,numeric}(groundSpeeds, phi, windStart = c(0,
-  0))
+\S4method{getWindEstimate}{matrix,numeric}(groundSpeeds, phi,
+  windStart = c(0, 0))
 }
 \arguments{
 \item{groundSpeeds}{matrix with two columns representing the ground speeds.}
@@ -31,4 +31,3 @@ set.seed(34)
 getWindEstimate(cbind(4*cos(s)+3+rnorm(length(s)), 4*sin(s)+2+rnorm(length(s))),0)
 getWindEstimate(cbind(4*cos(s)+3+rnorm(length(s),sd=.2), 4*sin(s)+2+rnorm(length(s),sd=.2)),0)
 }
-
