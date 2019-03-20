@@ -1,6 +1,6 @@
-a9731942cd361383081ada472535ace6 *DESCRIPTION
+a9e84d9da885f92d609f71ebae8a9cd6 *DESCRIPTION
 8aa1bb5e3a5c4ade9c9d96cb37cce04a *NAMESPACE
-73f4db180ada642a423e8931ffc103bc *NEWS.md
+51a4dc45596ebf292e498b71ae934185 *NEWS.md
 67b0e6ac29ecbe44461b6e79538e98c0 *R/AAA.R
 93fd49a9d506fd44ae14cd59a21ed46a *R/RcppExports.R
 27cef2561726c257cb7f0262495e27b2 *R/estimatePhi.R
@@ -14,10 +14,10 @@ a9731942cd361383081ada472535ace6 *DESCRIPTION
 562e347cf519f091c4e0fd23e2c77876 *data/storks.rda
 d760f1f80db3cac1816b92ad2ac59a1b *inst/doc/estimatingWindSpeed.R
 0e7e82f23bbc895fcdfc294bdfb14225 *inst/doc/estimatingWindSpeed.Rmd
-aae4dd844c5a5637c296994a5e23737f *inst/doc/estimatingWindSpeed.html
-4b75cb9134af6b50bfaa3f37f0935e35 *inst/doc/windEstimationParameters.R
-91d248fe4f649d847da43e4e0391a609 *inst/doc/windEstimationParameters.Rmd
-743ba1002e02f1b840f0c715f0ff48a8 *inst/doc/windEstimationParameters.html
+b2fbb63637c33dde8c8cb5d0cf8fa23d *inst/doc/estimatingWindSpeed.html
+ab6ab0fd6aa332978ebf117ec9be4377 *inst/doc/windEstimationParameters.R
+6eb52328ea822bbdd5a1326fc94702d3 *inst/doc/windEstimationParameters.Rmd
+98146de152f6349a5c20abc66e314484 *inst/doc/windEstimationParameters.html
 49ebead5e82c003bb9bfd7fc841b5f67 *man/estimatePhi.Rd
 1397f6299f8bbc3b1891d18e83436d84 *man/findGoodPoints.Rd
 c5ed3eb3c5f9af195027e3c3d11c06a0 *man/getDefaultIsThermallingFunction.Rd
@@ -36,4 +36,4 @@ a1a00bb33901353f73c6c1e3477a143b *tests/testthat.R
 b4c6e3fd4009d2787e00570eac1e8b4c *tests/testthat/test.getWindEstimate.R
 fe34ef19c6066d7853748df8316a64dc *tests/testthat/test.getWindEstimates.R
 0e7e82f23bbc895fcdfc294bdfb14225 *vignettes/estimatingWindSpeed.Rmd
-91d248fe4f649d847da43e4e0391a609 *vignettes/windEstimationParameters.Rmd
+6eb52328ea822bbdd5a1326fc94702d3 *vignettes/windEstimationParameters.Rmd

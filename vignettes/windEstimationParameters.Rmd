@@ -32,7 +32,7 @@ In order to determine an appropriate sampling rate we check the sampling rate in
 tdiffs <- diff(as.numeric(timestamps(data)))
 quantile(tdiffs, c(0.01, 0.1, 0.5, 0.9, 0.99))
 ```
-The mayority of data points were sampled in 1 second intervals, so we choose 1 second as our sampling interval:
+The majority of data points were sampled in 1 second intervals, so we choose 1 second as our sampling interval:
 ```{r}
 isSamplingRegular <- 1
 ```
@@ -42,11 +42,11 @@ Wind estimation results can only be trusted if the bird is actually flying and i
 isThermallingFunction <- getDefaultIsThermallingFunction(360, 4)
 ```
 
-The wind estimation is based on the assumption that, within a given track segment, the air speed of the bird fluctuates randomly around a fixed mean. For high sampling rates, however, the deviations from the mean are not statistically independent, but tend to be correlated between subsequent points. We therefore need to estimate the temporal autocorrelation paramater phi (see [AR(1) processes](https://en.wikipedia.org/wiki/Autoregressive_model#Example:_An_AR.281.29_process)). Phi is not estimated for each track segment separately, but across all segments of a track. For performance reasons the number of segments used in the estimation of phi can be restricted:
+The wind estimation is based on the assumption that, within a given track segment, the air speed of the bird fluctuates randomly around a fixed mean. For high sampling rates, however, the deviations from the mean are not statistically independent, but tend to be correlated between subsequent points. We therefore need to estimate the temporal autocorrelation parameter phi (see [AR(1) processes](https://en.wikipedia.org/wiki/Autoregressive_model#Example:_An_AR.281.29_process)). Phi is not estimated for each track segment separately, but across all segments of a track. For performance reasons the number of segments used in the estimation of phi can be restricted:
 ```{r}
 maxPointsToUseInEstimate <- 25
 ```
-With the parameters defined so far we can run the function for estimating temporal autocorrelation paramater phi:
+With the parameters defined so far we can run the function for estimating temporal autocorrelation parameter phi:
 ```{r}
 estimationResult <- estimatePhi(data, isSamplingRegular=isSamplingRegular, windowSize=windowSize, isThermallingFunction=isThermallingFunction, maxPointsToUseInEstimate=maxPointsToUseInEstimate, phiInitialEstimate=0, returnPointsUsedInEstimate=T)
 ```
@@ -87,9 +87,9 @@ windSpeed <-sqrt(windEst2$windX^2+windEst2$windY^2)
 plot(timestamps(windEst2), windSpeed)
 ```
 
-The ouput parameters windVarX, windVarY, and windCovarXY define the covariance matrix which characterizes the estimation error of the wind vector (windX, windY). The paramteter windVarMax provides a simplified error estimate, i.e. an upper bound for the error in any given direction. The following plot shows the distribution of the standard error of the wind estimate based on windVarMax
+The output parameters windVarX, windVarY, and windCovarXY define the covariance matrix which characterizes the estimation error of the wind vector (windX, windY). The parameter windVarMax provides a simplified error estimate, i.e. an upper bound for the error in any given direction. The following plot shows the distribution of the standard error of the wind estimate based on windVarMax
 ```{r}
-hist(sqrt(windEst2$windVarMax), breaks=seq(0,1,0.1))
+hist(sqrt(windEst2$windVarMax), breaks=seq(0,1.1,0.1))
 ```
 
 showing that the standard error is typically in the range of 0.5 m/s.

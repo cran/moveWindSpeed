@@ -54,7 +54,7 @@ windSpeed <-sqrt(windEst2$windX^2+windEst2$windY^2)
 plot(timestamps(windEst2), windSpeed)
 
 ## ------------------------------------------------------------------------
-hist(sqrt(windEst2$windVarMax), breaks=seq(0,1,0.1))
+hist(sqrt(windEst2$windVarMax), breaks=seq(0,1.1,0.1))
 
 ## ------------------------------------------------------------------------
 phis <- seq(.01, .99, by = .01)
