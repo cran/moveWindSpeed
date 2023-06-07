@@ -37,6 +37,8 @@ We focus on 2 minutes where we know that high resolution trajectories were recor
 storksSub <-
   storks[strftime(timestamps(storks), format = "%H%M", tz="UTC") %in% c("1303", "1304"), ]
 storksWind <- getWindEstimates(storksSub)
+# Use evolution status 2 to avoid using rgdal (set using sp)
+set_evolution_status(2L)
 storksWind <- spTransform(storksWind, center = T)
 indiv1 <- storksWind[[1]]
 indiv1

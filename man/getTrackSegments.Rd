@@ -4,9 +4,16 @@
 \alias{getTrackSegments}
 \title{An helper function to extract trajectory segments for wind estimation from a track}
 \usage{
-getTrackSegments(data, timestamps, windowSize = 29,
-  isFocalPoint = function(i, ts) {     TRUE }, isSamplingRegular = 1,
-  focalSampleBefore = 0)
+getTrackSegments(
+  data,
+  timestamps,
+  windowSize = 29,
+  isFocalPoint = function(i, ts) {
+     TRUE
+ },
+  isSamplingRegular = 1,
+  focalSampleBefore = 0
+)
 }
 \arguments{
 \item{data}{A two column dataframe.}

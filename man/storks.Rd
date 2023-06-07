@@ -4,9 +4,11 @@
 \name{storks}
 \alias{storks}
 \title{Example stork data.}
-\format{A MoveStack consisting of 22333 locations}
+\format{
+A MoveStack consisting of 22333 locations
+}
 \source{
-\url{http://www.movebank.org/}
+\url{https://www.movebank.org/}
 }
 \usage{
 storks

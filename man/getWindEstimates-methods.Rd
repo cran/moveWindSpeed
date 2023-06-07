@@ -13,19 +13,32 @@ getWindEstimates(data, timestamps, ...)
 
 \S4method{getWindEstimates}{MoveStack,missing}(data, timestamps, ...)
 
-\S4method{getWindEstimates}{Move,missing}(data, timestamps,
-  groundSpeedXY = NULL, ...)
+\S4method{getWindEstimates}{Move,missing}(data, timestamps, groundSpeedXY = NULL, ...)
 
-\S4method{getWindEstimates}{data.frame,POSIXct}(data, timestamps,
-  windowSize = 29, isFocalPoint = function(i, ts) {     TRUE },
-  isSamplingRegular = 1, focalSampleBefore = 0,
-  returnSegmentList = F, referenceGroundSpeed = NULL, ...)
+\S4method{getWindEstimates}{data.frame,POSIXct}(
+  data,
+  timestamps,
+  windowSize = 29,
+  isFocalPoint = function(i, ts) {
+     TRUE
+ },
+  isSamplingRegular = 1,
+  focalSampleBefore = 0,
+  returnSegmentList = F,
+  referenceGroundSpeed = NULL,
+  ...
+)
 
-\S4method{getWindEstimates}{list,ANY}(data, timestamps, phi = 0,
+\S4method{getWindEstimates}{list,ANY}(
+  data,
+  timestamps,
+  phi = 0,
   isThermallingFunction = getDefaultIsThermallingFunction(360, 4),
-  columnNamesWind = c("estimationSuccessful", "residualVarAirspeed",
-  "windX", "windY", "windVarX", "windVarY", "windCovarXY", "windVarMax",
-  "airX", "airY"), referenceGroundSpeed = NULL, ...)
+  columnNamesWind = c("estimationSuccessful", "residualVarAirspeed", "windX", "windY",
+    "windVarX", "windVarY", "windCovarXY", "windVarMax", "airX", "airY"),
+  referenceGroundSpeed = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{Move object, MoveStack or data.frame containing wind speeds}
@@ -64,6 +77,8 @@ Generate wind estimates for a trajectories or data frame with wind speeds
 data("storks")
 # run example for reduced dataset
 windEst<-getWindEstimates(storks[format(timestamps(storks),"\%H")=="12",][[2:3]])
+# Use evolution status 2 to avoid using rgdal (set using sp)
+set_evolution_status(2L)
 windEst<-spTransform(windEst, center=TRUE)
 plot(windEst)
 # only plot few arrows of estimates

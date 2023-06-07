@@ -9,8 +9,7 @@
 \usage{
 getWindEstimate(groundSpeeds, phi, windStart = c(0, 0))
 
-\S4method{getWindEstimate}{matrix,numeric}(groundSpeeds, phi,
-  windStart = c(0, 0))
+\S4method{getWindEstimate}{matrix,numeric}(groundSpeeds, phi, windStart = c(0, 0))
 }
 \arguments{
 \item{groundSpeeds}{matrix with two columns representing the ground speeds.}

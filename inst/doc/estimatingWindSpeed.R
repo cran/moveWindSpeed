@@ -1,8 +1,8 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 library(knitr)
 knitr::opts_chunk$set(fig.width=5, fig.height = 4)
 
-## ----load----------------------------------------------------------------
+## ----load---------------------------------------------------------------------
 require(moveWindSpeed)
 data("storks")
 plot(
@@ -14,18 +14,20 @@ plot(
   cex = .3
 )
 
-## ----subset--------------------------------------------------------------
+## ----subset-------------------------------------------------------------------
 storksSub <-
   storks[strftime(timestamps(storks), format = "%H%M", tz="UTC") %in% c("1303", "1304"), ]
 storksWind <- getWindEstimates(storksSub)
+# Use evolution status 2 to avoid using rgdal (set using sp)
+set_evolution_status(2L)
 storksWind <- spTransform(storksWind, center = T)
 indiv1 <- storksWind[[1]]
 indiv1
 
-## ----freq----------------------------------------------------------------
+## ----freq---------------------------------------------------------------------
 unique(as.numeric(diff(timestamps(indiv1)), units='secs'))
 
-## ----plotExample---------------------------------------------------------
+## ----plotExample--------------------------------------------------------------
 plot(
   indiv1,
   type = 'l',
@@ -43,7 +45,7 @@ arrows(
   length = .1
 )
 
-## ----arrows--------------------------------------------------------------
+## ----arrows-------------------------------------------------------------------
 indivSub <- indiv1[45:72,]
 plot(indivSub, pch = 19)
 arrows(
@@ -77,13 +79,13 @@ legend(
   lty = 1
 )
 
-## ----airVector-----------------------------------------------------------
+## ----airVector----------------------------------------------------------------
 s <- !is.na(indiv1$windX)
 x <- cumsum(diff(coordinates(indiv1)[, 1])[s] - indiv1$windX[s])
 y <- cumsum(diff(coordinates(indiv1)[, 2])[s] - indiv1$windY[s])
 plot(x, y, type = 'l', main = "Wind corrected trajectory")
 
-## ----group---------------------------------------------------------------
+## ----group--------------------------------------------------------------------
 storksSub <- getWindEstimates(storksSub, windowSize = 31)
 plot(
   storksSub$windX,
@@ -96,7 +98,7 @@ plot(
   main = "Distribution of wind speed estimates"
 )
 
-## ----verticalProfile-----------------------------------------------------
+## ----verticalProfile----------------------------------------------------------
 windData <- getWindEstimates(storks)
 windData <- windData[strftime(timestamps(windData), format = "%H", tz="UTC") == "12" &
                        !is.na(windData$windX), ]
@@ -110,7 +112,7 @@ plot(
   pch = 19
 )
 
-## ----rotations-----------------------------------------------------------
+## ----rotations----------------------------------------------------------------
 indivSub <- storks[[1]]
 quater <-
   getWindEstimates(indivSub, isThermallingFunction = getDefaultIsThermallingFunction(90))
@@ -126,7 +128,7 @@ sum(!is.na(half$windX))
 sum(!is.na(full$windX))
 sum(!is.na(two$windX))
 
-## ----wl------------------------------------------------------------------
+## ----wl-----------------------------------------------------------------------
 short <-
   getWindEstimates(indivSub,
                    isThermallingFunction = getDefaultIsThermallingFunction(720),
@@ -138,7 +140,7 @@ long <-
 sum(!is.na(short$windX))
 sum(!is.na(long$windX))
 
-## ----speedup-------------------------------------------------------------
+## ----speedup------------------------------------------------------------------
 system.time(getWindEstimates(
   indivSub,
   isFocalPoint = function(i, ts) {

@@ -4,8 +4,13 @@
 \alias{findGoodPoints}
 \title{Function to find good points for estimation of phi}
 \usage{
-findGoodPoints(data, maxPointsToUseInEstimate, phiInitialEstimate,
-  windowSize, ...)
+findGoodPoints(
+  data,
+  maxPointsToUseInEstimate,
+  phiInitialEstimate,
+  windowSize,
+  ...
+)
 }
 \arguments{
 \item{data}{An move object.}

@@ -39,7 +39,7 @@ getIsSamplingRegularFunction <- function(isSamplingRegular) {
   } else{
     isSamplingRegularFun <- isSamplingRegular
   }
-  if(!class(isSamplingRegularFun) == "function") stop("isSamplingRegular must be a number or a boolean function on a vector of timestamps")
+  if(!inherits(isSamplingRegularFun, "function")) stop("isSamplingRegular must be a number or a boolean function on a vector of timestamps")
   isSamplingRegularFun
 }
 
@@ -60,7 +60,7 @@ getIsFocalPointFunction <- function(isFocalPoint) {
       i %in% u
     }
   }
-  if(!class(isFocalPoint) == "function") stop("isFocalPoint must be a vector of numbers, a boolean vector or a function")
+  if(!inherits(isFocalPoint, "function")) stop("isFocalPoint must be a vector of numbers, a boolean vector or a function")
   return(isFocalPoint)
 }
 

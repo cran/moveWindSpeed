@@ -4,7 +4,7 @@
 #'
 #' @format A MoveStack consisting of 22333 locations
 #'
-#' @source \url{http://www.movebank.org/}
+#' @source \url{https://www.movebank.org/}
 #' @examples
 #' data("storks")
 "storks"

@@ -23,6 +23,8 @@
 #' data("storks")
 #' # run example for reduced dataset
 #' windEst<-getWindEstimates(storks[format(timestamps(storks),"%H")=="12",][[2:3]])
+#' # Use evolution status 2 to avoid using rgdal (set using sp)
+#' set_evolution_status(2L)
 #' windEst<-spTransform(windEst, center=TRUE)
 #' plot(windEst)
 #' # only plot few arrows of estimates
